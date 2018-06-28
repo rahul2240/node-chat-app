@@ -18,6 +18,15 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('Disconnected from the server');
   });
+
+  socket.emit('newEmail', {
+    from: 'rahul@gmail.com',
+    text: 'helow world'
+  });
+
+  socket.on('createEmail', (email) => {
+    console.log('New email is', email);
+  })
 });
 
 
