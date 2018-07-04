@@ -15,18 +15,32 @@ var io = socketIO(server);
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.on('disconnect', () => {
-    console.log('Disconnected from the server');
+  socket.emit('newMessage', {
+    from: 'Admin',
+    text: 'Welcome to chat application'
   });
 
-  socket.emit('newEmail', {
-    from: 'rahul@gmail.com',
-    text: 'helow world'
+  socket.broadcast.emit('newMessage', {
+    from: 'admin',
+    text: 'new user connected',
+    createdAt: new Date().getTime()
   });
 
-  socket.on('createEmail', (email) => {
-    console.log('New email is', email);
-  })
+  socket.on('createMessage', (message) => {
+    console.log('New message is', message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
+  });
+
+
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+
 });
 
 
